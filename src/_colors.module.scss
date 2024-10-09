@@ -1,0 +1,5 @@
+@import "tokens/colors.json";
+
+@mixin yellowBackgroundColor() {
+  background-color: $my-yellow;
+}
