@@ -1,6 +1,6 @@
 # sass-loader json imports
 
-This repository aims to implement .json imports in sass-loader using `sass-embedded` (or `sass`).
+This repository aims to implement .json imports in sass-loader using `sass-embedded` (or `sass`), and highlights blocker with the implementation.
 
 ## Installation
 
