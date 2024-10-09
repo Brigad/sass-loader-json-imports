@@ -37,3 +37,15 @@ Can't find stylesheet to import.
  @ ./src/Test.module.scss 8:6-202 20:17-24 24:0-172 24:0-172 25:22-29 25:33-47 25:50-64
  @ ./src/index.js 1:0-40
 ```
+
+### `3-patch-sass-loader` branch
+
+[Changes](https://github.com/Brigad/sass-loader-json-imports/pull/2)
+
+/!\ Don't forget to run `yarn` to apply the patch
+
+This diff represents the minimal changes needed to make the importer work as expected. My observations are:
+
+- That the `// No need to pass `loadPaths`, because modern API handle them itself` comment is not 100% right.
+- That without `restrictions: [/\.(((sa|sc|c)ss)|json)$/i],`, the JSON file won't be picked up by the webpack resolver and thus it won't load.
+- That we need to re-implement our importer logic in the `sass-loader` `load` function because it won't call our importer (?).
