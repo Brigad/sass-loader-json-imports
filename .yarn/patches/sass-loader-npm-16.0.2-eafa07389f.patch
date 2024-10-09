@@ -1,0 +1,77 @@
+diff --git a/dist/index.js b/dist/index.js
+index 7a3ca0ffb49a51f1f306fbaecae816c7e9f9923f..4ea2088bfba90acd138d731d86ee5edb5e14a466 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -38,9 +38,12 @@ async function loader(content) {
+       } = sassOptions;
+       sassOptions.importer.push((0, _utils.getWebpackImporter)(this, implementation, includePaths));
+     } else {
++      const {
++        loadPaths,
++      } = sassOptions;
+       sassOptions.importers.push(
+       // No need to pass `loadPaths`, because modern API handle them itself
+-      (0, _utils.getModernWebpackImporter)(this, implementation, []));
++      (0, _utils.getModernWebpackImporter)(this, implementation, loadPaths));
+     }
+   }
+   let compile;
+diff --git a/dist/utils.js b/dist/utils.js
+index 34f6c14c0373818f0cf7e372be1dc22a2d3696f9..fdbec457fe8d6c5399f23fad91e2a4cf22f4038f 100644
+--- a/dist/utils.js
++++ b/dist/utils.js
+@@ -382,7 +382,7 @@ function getWebpackResolver(resolverFactory, implementation, includePaths = [])
+     mainFields: [],
+     mainFiles: ["_index.import", "_index", "index.import", "index"],
+     modules: [],
+-    restrictions: [/\.((sa|sc|c)ss)$/i],
++    restrictions: [/\.(((sa|sc|c)ss)|json)$/i],
+     preferRelative: true
+   }));
+   const webpackModuleResolve = promiseResolve(resolverFactory({
+@@ -471,6 +471,7 @@ function getWebpackResolver(resolverFactory, implementation, includePaths = [])
+     return startResolving(resolutionMap);
+   };
+ }
++const nodeJsonImporter = require('node-sass-json-importer');
+ const MATCH_CSS = /\.css$/i;
+ function getModernWebpackImporter(loaderContext, implementation, loadPaths) {
+   const resolve = getWebpackResolver(loaderContext.getResolve, implementation, loadPaths);
+@@ -492,6 +493,7 @@ function getModernWebpackImporter(loaderContext, implementation, loadPaths) {
+     },
+     async load(canonicalUrl) {
+       const ext = _path.default.extname(canonicalUrl.pathname);
++      let contents;
+       let syntax;
+       if (ext && ext.toLowerCase() === ".scss") {
+         syntax = "scss";
+@@ -499,13 +501,19 @@ function getModernWebpackImporter(loaderContext, implementation, loadPaths) {
+         syntax = "indented";
+       } else if (ext && ext.toLowerCase() === ".css") {
+         syntax = "css";
++      } else if (ext && ext.toLowerCase() === ".json") {
++        contents = nodeJsonImporter().bind({ options: {} })(
++          canonicalUrl.pathname.split('/').at(-1),
++          canonicalUrl.pathname,
++        ).contents;
++        syntax = "scss";
+       } else {
+         // Fallback to default value
+         syntax = "scss";
+       }
+       try {
+         // eslint-disable-next-line no-shadow
+-        const contents = await new Promise((resolve, reject) => {
++        contents = contents || (await new Promise((resolve, reject) => {
+           // Old version of `enhanced-resolve` supports only path as a string
+           // TODO simplify in the next major release and pass URL
+           const canonicalPath = _url.default.fileURLToPath(canonicalUrl);
+@@ -516,7 +524,7 @@ function getModernWebpackImporter(loaderContext, implementation, loadPaths) {
+             }
+             resolve(content);
+           });
+-        });
++        }));
+         return {
+           contents,
+           syntax,
