@@ -3,6 +3,8 @@ const nodeJsonImporter = require("node-sass-json-importer");
 const jsonImporter = (options) => {
   return {
     canonicalize: (url) => {
+      console.log(url);
+
       if (!url.endsWith(".json")) {
         return null;
       }
