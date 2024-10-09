@@ -1,5 +1,5 @@
-@import "tokens/colors.json";
+@import "colors.module.scss";
 
 .hello {
-  background-color: $my-yellow;
+  @include yellowBackgroundColor();
 }
