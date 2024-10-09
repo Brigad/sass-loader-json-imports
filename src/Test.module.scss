@@ -1,3 +1,5 @@
+@import "tokens/colors.json";
+
 .hello {
-  background-color: yellow;
+  background-color: $my-yellow;
 }
