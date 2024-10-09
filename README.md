@@ -10,7 +10,7 @@ yarn
 
 ## Context
 
-I have adapted the [node-sass-json-importer](https://github.com/pmowrer/node-sass-json-importer) module to match the `modern` API from `dart-sass` and `sass-embedded`.
+I have adapted the [node-sass-json-importer](https://github.com/pmowrer/node-sass-json-importer) module to match the `modern` API from `dart-sass` and `sass-embedded` in the [sass-json-importer](https://github.com/Brigad/sass-loader-json-imports/blob/main/sass-json-importer.js) file.
 
 ## Reproduction
 
