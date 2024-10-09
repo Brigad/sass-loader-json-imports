@@ -1,2 +1,11 @@
 dist
 node_modules
+
+# yarn stuff
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions

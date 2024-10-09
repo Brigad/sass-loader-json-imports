@@ -34,9 +34,9 @@ module.exports = {
             options: {
               sourceMap: true,
               sassOptions: {
-                loadPaths: [path.resolve(__dirname, "./src")],
+                loadPaths: [path.resolve(__dirname, "./src/styles")],
                 importer: SassJSONImporter({
-                  includePaths: path.resolve(__dirname, "./src"),
+                  includePaths: path.resolve(__dirname, "./src/styles"),
                 }),
               },
             },
